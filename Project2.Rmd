@@ -1,0 +1,46 @@
+---
+title: "Effects of Natural Disasters in USA From NOAA Storm Database, both Health and Economic Effects are Explored"
+author: "SAI"
+date: "July 22, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Synopsis
+In united states we have large varieties of Natural Disasters that affect and cause damage both from economic point and 
+health point. SO we are trying to analyze which type of natural disasters are causing more affects so that we can take necessary actions.
+
+The data has been taken from the NOAA database and analysed to give the following two solutions:
+
+1. Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?
+2. Across the United States, which types of events have the greatest economic consequences?
+
+dplyr package is used to process the data and to produce the plots that can give us the perfect solutions to the above questions
+
+## Data Processing
+STEP1: Iputting the data in to RStudio and getting the feel of data including the dimensions
+```{r StormData}
+Input_data <- read.csv("repdata%2Fdata%2FStormData.csv.bz2",sep = ",", header = TRUE)
+head(input)
+dim(input)
+names(input)
+library(dplyr)
+```
+
+## Gathering The required data using the dplyr package
+
+The dplyr package is used to gather the data regarding the natural disasters that are cauisng problems both economically and health point of view
+```{r DataGathering, cache=TRUE}
+
+Total_combineddata <- Input_data %>% select(EVTYPE, FATALITIES, INJURIES)
+Fatalities_data <- Input_data %>% select(EVTYPE, FATALITIES)
+Injuries_data   <- Input_data %>% select(EVTYPE, INJURIES)
+
+
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
