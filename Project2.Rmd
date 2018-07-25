@@ -24,9 +24,9 @@ dplyr package is used to process the data and to produce the plots that can give
 STEP1: Iputting the data in to RStudio and getting the feel of data including the dimensions
 ```{r StormData}
 Input_data <- read.csv("repdata%2Fdata%2FStormData.csv.bz2",sep = ",", header = TRUE)
-head(input)
-dim(input)
-names(input)
+head(Input_data)
+dim(Input_data)
+names(Input_data)
 library(dplyr)
 ```
 
@@ -34,27 +34,23 @@ library(dplyr)
 
 The dplyr package is used to gather the data regarding the natural disasters that are cauisng problems both economically and health point of view
 ```{r DataGathering, cache=TRUE}
-
 Total_combineddata <- Input_data %>% select(EVTYPE, FATALITIES, INJURIES)
 Fatalities_data <- Input_data %>% select(EVTYPE, FATALITIES)
 Injuries_data   <- Input_data %>% select(EVTYPE, INJURIES)
 ```
 
-## Plotting the Fatalities
+## Plotting the Fatalities and Injuries
 
 ```{r Fatalities}
 par(mfrow = c(1, 2), mar = c(10, 4, 2, 2), las = 3, cex = 0.7, cex.main = 1.4, cex.lab = 1.2)
 Fatalities_data_SUM <- Fatalities_data %>% group_by(EVTYPE) %>% summarize(total_fatal = sum(FATALITIES))
 fatalities <- Fatalities_data_SUM[order(-Fatalities_data_SUM$total_fatal), ][1:20,]
-barplot(fatalities$total_fatal, names.arg = fatalities$EVTYPE  , col = 'red', main = "Events Harmful to Human population", xlab = "Events", ylab = "Number of Harmful Events")
-```
-
-## Plotting the Injuries
-```{r Injuries}
 INJURIES_data_SUM <- Injuries_data %>% group_by(EVTYPE) %>% summarize(total_Injuries = sum(INJURIES))
 Injuries <- INJURIES_data_SUM[order(-INJURIES_data_SUM$total_Injuries), ][1:20,]
 barplot(Injuries$total_Injuries, names.arg = Injuries$EVTYPE  , col = 'red', main = "Events Harmful to Human population", ylab = "Number of Harmful Events")
+barplot(fatalities$total_fatal, names.arg = fatalities$EVTYPE  , col = 'red', main = "Events Harmful to Human population", xlab = "Events", ylab = "Number of Harmful Events")
 ```
+
 
 ## Plotting the combined data
 ```{r combined_data}
