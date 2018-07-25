@@ -67,7 +67,7 @@ It is similar in the othe individual graphs also.
 
 Here i am selecting the EVents that are causing the greatest damage in terms of Economy point of view
 ```{r selecting_data}
-
+Input_data$PROPDMGNUM = 0
 Input_data[Input_data$PROPDMGEXP == "H", ]$PROPDMGNUM = Input_data[Input_data$PROPDMGEXP == "H", ]$PROPDMG * 10^2
 Input_data[Input_data$PROPDMGEXP == "K", ]$PROPDMGNUM = Input_data[Input_data$PROPDMGEXP == "K", ]$PROPDMG * 10^3
 Input_data[Input_data$PROPDMGEXP == "M", ]$PROPDMGNUM = Input_data[Input_data$PROPDMGEXP == "M", ]$PROPDMG * 10^6
