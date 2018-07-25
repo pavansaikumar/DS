@@ -22,8 +22,9 @@ dplyr package is used to process the data and to produce the plots that can give
 
 ## Data Processing
 STEP1: Iputting the data in to RStudio and getting the feel of data including the dimensions
-```{r StormData}
-Input_data <- read.csv("repdata%2Fdata%2FStormData.csv.bz2",sep = ",", header = TRUE)
+```{r data}
+setwd("C:/Users/pavansai/Desktop/DS")
+Input_data <- read.csv(bzfile("repdata%2Fdata%2FStormData.csv.bz2"),sep = ",", header = TRUE)
 head(Input_data)
 dim(Input_data)
 names(Input_data)
