@@ -4,7 +4,7 @@ author: "SAI"
 date: "July 22, 2018"
 output: html_document
 ---
-
+# Effects of Natural Disasters in USA From NOAA Storm Database, both Health and Economic Effects are Explored
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -38,9 +38,66 @@ The dplyr package is used to gather the data regarding the natural disasters tha
 Total_combineddata <- Input_data %>% select(EVTYPE, FATALITIES, INJURIES)
 Fatalities_data <- Input_data %>% select(EVTYPE, FATALITIES)
 Injuries_data   <- Input_data %>% select(EVTYPE, INJURIES)
-
-
-
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Plotting the Fatalities
+
+```{r Fatalities}
+par(mfrow = c(1, 2), mar = c(10, 4, 2, 2), las = 3, cex = 0.7, cex.main = 1.4, cex.lab = 1.2)
+Fatalities_data_SUM <- Fatalities_data %>% group_by(EVTYPE) %>% summarize(total_fatal = sum(FATALITIES))
+fatalities <- Fatalities_data_SUM[order(-Fatalities_data_SUM$total_fatal), ][1:20,]
+barplot(fatalities$total_fatal, names.arg = fatalities$EVTYPE  , col = 'red', main = "Events Harmful to Human population", xlab = "Events", ylab = "Number of Harmful Events")
+```
+
+## Plotting the Injuries
+```{r Injuries}
+INJURIES_data_SUM <- Injuries_data %>% group_by(EVTYPE) %>% summarize(total_Injuries = sum(INJURIES))
+Injuries <- INJURIES_data_SUM[order(-INJURIES_data_SUM$total_Injuries), ][1:20,]
+barplot(Injuries$total_Injuries, names.arg = Injuries$EVTYPE  , col = 'red', main = "Events Harmful to Human population", ylab = "Number of Harmful Events")
+```
+
+## Plotting the combined data
+```{r combined_data}
+Combined_data_SUM <- Total_combineddata %>% group_by(EVTYPE) %>% summarize(total_Events = sum(INJURIES) + sum(FATALITIES))
+Combined_data <- Combined_data_SUM[order(-Combined_data_SUM$total_Events), ][1:20,]
+barplot(Combined_data$total_Events, names.arg = Combined_data$EVTYPE  , col = 'red', main = "Events Harmful to Human population", ylab = "Number of Harmful Events")
+```
+
+From the above graph Torandos are the highest damaging causing natural EVents and followed by Excessive Heating.
+It is similar in the othe individual graphs also.
+
+## Selecting the data for the events of greatest economic consequences
+
+Here i am selecting the EVents that are causing the greatest damage in terms of Economy point of view
+```{r selecting_data}
+
+Input_data[Input_data$PROPDMGEXP == "H", ]$PROPDMGNUM = Input_data[Input_data$PROPDMGEXP == "H", ]$PROPDMG * 10^2
+Input_data[Input_data$PROPDMGEXP == "K", ]$PROPDMGNUM = Input_data[Input_data$PROPDMGEXP == "K", ]$PROPDMG * 10^3
+Input_data[Input_data$PROPDMGEXP == "M", ]$PROPDMGNUM = Input_data[Input_data$PROPDMGEXP == "M", ]$PROPDMG * 10^6
+Input_data[Input_data$PROPDMGEXP == "B", ]$PROPDMGNUM = Input_data[Input_data$PROPDMGEXP == "B", ]$PROPDMG * 10^9
+
+Input_data$CROPDMGNUM = 0
+Input_data[Input_data$CROPDMGEXP == "H", ]$CROPDMGNUM = Input_data[Input_data$CROPDMGEXP == "H", ]$CROPDMG * 10^2
+Input_data[Input_data$CROPDMGEXP == "K", ]$CROPDMGNUM = Input_data[Input_data$CROPDMGEXP == "K", ]$CROPDMG * 10^3
+Input_data[Input_data$CROPDMGEXP == "M", ]$CROPDMGNUM = Input_data[Input_data$CROPDMGEXP == "M", ]$CROPDMG * 10^6
+Input_data[Input_data$CROPDMGEXP == "B", ]$CROPDMGNUM = Input_data[Input_data$CROPDMGEXP == "B", ]$CROPDMG * 10^9
+
+Total_Economic_combineddata <- Input_data %>% select(EVTYPE,PROPDMGNUM,CROPDMGNUM)
+```
+
+## Plotting the events that are causing the maximum Economic Damage
+
+```{r Economic_Natural_Disaster}
+total_Combined_data_SUM <- Total_Economic_combineddata %>% group_by(EVTYPE) %>% summarize(total_Events = sum(PROPDMGNUM) + sum(CROPDMGNUM))
+Economic_disasters_Combined_data <- total_Combined_data_SUM[order(-total_Combined_data_SUM$total_Events), ][1:10,]
+barplot(Economic_disasters_Combined_data$total_Events, names.arg = Economic_disasters_Combined_data$EVTYPE  , col = 'red', main = "Events Harmful to Human population", ylab = "Number of Harmful Events")
+```
+
+
+From the above graph we can see that floods are causing the Highest amount of damage followed by Hurricanes, Tornadoes, Stormsurges
+
+## Results
+
+So from the above graphs we can conclude that the from the Health point of view Tornados are causing the highest damges where as from the economic point of view the highest damage is caused by the floods. 
+
+Therefore respective authorities should take care of this inorder to prevent future damages.
